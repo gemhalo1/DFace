@@ -8,7 +8,7 @@ from dface.core.imagedb import ImageDB
 from dface.core.image_reader import TestImageLoader
 import time
 import os
-import cPickle
+import pickle as cPickle
 from dface.core.utils import convert_to_square,IoU
 import dface.config as config
 import dface.core.vision as vision

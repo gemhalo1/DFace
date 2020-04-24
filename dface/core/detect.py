@@ -55,7 +55,7 @@ class MtcnnDetector(object):
                  onet = None,
                  min_face_size=12,
                  stride=2,
-                 threshold=[0.6, 0.7, 0.7],
+                 threshold=(0.6, 0.7, 0.7),
                  scale_factor=0.709,
                  ):
 
@@ -267,7 +267,7 @@ class MtcnnDetector(object):
             if self.pnet_detector.use_cuda:
                 feed_imgs = feed_imgs.cuda()
 
-            cls_map, reg = self.pnet_detector(feed_imgs)
+            cls_map, reg = self.pnet_detector(feed_imgs.float())
 
             cls_map_np = image_tools.convert_chwTensor_to_hwcNumpy(cls_map.cpu())
             reg_np = image_tools.convert_chwTensor_to_hwcNumpy(reg.cpu())

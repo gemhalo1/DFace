@@ -116,10 +116,10 @@ def gen_pnet_data(data_dir,anno_file,prefix):
                 delta_x = npr.randint(-w * 0.2, w * 0.2)
                 delta_y = npr.randint(-h * 0.2, h * 0.2)
 
-                nx1 = max(x1 + w / 2 + delta_x - size / 2, 0)
-                ny1 = max(y1 + h / 2 + delta_y - size / 2, 0)
-                nx2 = nx1 + size
-                ny2 = ny1 + size
+                nx1 = int(max(x1 + w / 2 + delta_x - size / 2, 0))
+                ny1 = int(max(y1 + h / 2 + delta_y - size / 2, 0))
+                nx2 = int(nx1 + size)
+                ny2 = int(ny1 + size)
 
                 if nx2 > width or ny2 > height:
                     continue
