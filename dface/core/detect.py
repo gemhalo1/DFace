@@ -387,18 +387,27 @@ face candidates:%d, current batch_size:%d"%(num_boxes, batch_size)
         # cropped_ims_tensors = np.zeros((num_boxes, 3, 24, 24), dtype=np.float32)
         cropped_ims_tensors = []
         for i in range(num_boxes):
+            if tmph[i] <= 24 or tmpw[i] <= 24:
+                continue
+            if dy[i] < 0 or dx[i] < 0 or edy[i] < 0 or edx[i] < 0 or y[i] < 0 or ey[i] < 0 or x[i] < 0 or ex[i] < 0:
+                continue
+
             tmp = np.zeros((tmph[i], tmpw[i], 3), dtype=np.uint8)
             tmp[dy[i]:edy[i]+1, dx[i]:edx[i]+1, :] = im[y[i]:ey[i]+1, x[i]:ex[i]+1, :]
             crop_im = cv2.resize(tmp, (24, 24))
             crop_im_tensor = image_tools.convert_image_to_tensor(crop_im)
             # cropped_ims_tensors[i, :, :, :] = crop_im_tensor
             cropped_ims_tensors.append(crop_im_tensor)
+
+        if len(cropped_ims_tensors) == 0:
+            return None, None
+
         feed_imgs = Variable(torch.stack(cropped_ims_tensors))
 
         if self.rnet_detector.use_cuda:
             feed_imgs = feed_imgs.cuda()
 
-        cls_map, reg = self.rnet_detector(feed_imgs)
+        cls_map, reg = self.rnet_detector(feed_imgs.float())
 
         cls_map = cls_map.cpu().data.numpy()
         reg = reg.cpu().data.numpy()

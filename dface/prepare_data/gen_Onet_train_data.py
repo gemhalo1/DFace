@@ -7,7 +7,7 @@ from dface.core.imagedb import ImageDB
 from dface.core.image_reader import TestImageLoader
 import time
 import os
-import cPickle
+import pickle as cPickle
 from dface.core.utils import convert_to_square,IoU
 import dface.config as config
 import dface.core.vision as vision
@@ -95,7 +95,7 @@ def gen_onet_sample_data(data_dir,anno_file,det_boxs_file,prefix):
         annotation = annotation.strip().split(' ')
         im_idx = os.path.join(prefix,annotation[0])
 
-        boxes = map(float, annotation[1:])
+        boxes = list(map(float, annotation[1:]))
         boxes = np.array(boxes, dtype=np.float32).reshape(-1, 4)
         im_idx_list.append(im_idx)
         gt_boxes_list.append(boxes)
@@ -109,7 +109,7 @@ def gen_onet_sample_data(data_dir,anno_file,det_boxs_file,prefix):
     f2 = open(os.path.join(save_path, 'neg_%d.txt' % image_size), 'w')
     f3 = open(os.path.join(save_path, 'part_%d.txt' % image_size), 'w')
 
-    det_handle = open(det_boxs_file, 'r')
+    det_handle = open(det_boxs_file, 'rb')
 
     det_boxes = cPickle.load(det_handle)
     print(len(det_boxes), num_of_images)

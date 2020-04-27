@@ -91,7 +91,7 @@ def gen_rnet_sample_data(data_dir,anno_file,det_boxs_file,prefix_path):
         annotation = annotation.strip().split(' ')
         im_idx = os.path.join(prefix_path,annotation[0])
 
-        boxes = map(float, annotation[1:])
+        boxes = list(map(float, annotation[1:]))
         boxes = np.array(boxes, dtype=np.float32).reshape(-1, 4)
         im_idx_list.append(im_idx)
         gt_boxes_list.append(boxes)
@@ -105,7 +105,7 @@ def gen_rnet_sample_data(data_dir,anno_file,det_boxs_file,prefix_path):
     f2 = open(os.path.join(save_path, 'neg_%d.txt' % image_size), 'w')
     f3 = open(os.path.join(save_path, 'part_%d.txt' % image_size), 'w')
 
-    det_handle = open(det_boxs_file, 'r')
+    det_handle = open(det_boxs_file, 'rb')
 
     det_boxes = cPickle.load(det_handle)
     print(len(det_boxes), num_of_images)
