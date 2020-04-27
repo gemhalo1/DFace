@@ -1,3 +1,5 @@
 .idea/
 *.pyc
 log/*.log
+_model_
+_train_data_
